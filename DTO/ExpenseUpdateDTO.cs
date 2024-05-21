@@ -5,6 +5,6 @@
         public string Name { get; set; } = null!;
         public decimal Amount { get; set; }
         public string? Category { get; set; }
-        public DateTime Date { get; set; }
+        public DateOnly Date { get; set; }
     }
 }

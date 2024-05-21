@@ -1,6 +1,6 @@
 ﻿namespace ExpenseManagementMVC.Services
 {
-    public interface IApplicationsService
+    public interface IApplicationService
     {
         ExpenseService ExpenseService { get; }
         UserService UserService { get; }

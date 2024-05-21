@@ -26,7 +26,7 @@ namespace ExpenseManagementMVC
             var connString = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<ExpensesDbContext>(options => options.UseSqlServer(connString));
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-            builder.Services.AddScoped<IApplicationsService, ApplicationService>();
+            builder.Services.AddScoped<IApplicationService, ApplicationService>();
             builder.Services.AddScoped<IValidator<UserSignUpDTO>, UserSignUpValidator>();
             builder.Services.AddScoped<IValidator<ExpenseInsertDTO>, ExpenseInsertValidator>();
             builder.Services.AddScoped<IValidator<ExpenseUpdateDTO>, ExpenseUpdateValidator>();

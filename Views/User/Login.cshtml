@@ -21,14 +21,14 @@
                     <label for="username" class="col-md-2 col-form-label text-end">Username</label>
                     <div class="col-md-6">
                         <input type="text" class="form-control" name="username" id="username"
-                               placeholder="Enter username" value="" />
+                               placeholder="Enter username" value="" required/>
                     </div>
                 </div>
                 <div class="row mb-3">
                     <label for="password" class="col-md-2 col-form-label text-end">Password</label>
                     <div class="col-md-6">
                         <input type="password" class="form-control" name="password" id="password"
-                               placeholder="Enter password" value="" />
+                               placeholder="Enter password" value="" required />
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -42,6 +42,7 @@
                         <button type="submit" class="btn btn-primary">Login</button>
                     </div>
                 </div>
+                @Html.Hidden("returnUrl", ViewData["ReturnUrl"] as string)
             </form>
 
             <div class="offset-md-2">

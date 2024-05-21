@@ -120,14 +120,14 @@ namespace ExpenseManagementMVC.Services
             return expense;
         }
 
-        public async Task<bool> UpdateExpenseAsync(ExpenseUpdateDTO dto, string username)
+        public async Task<bool> UpdateExpenseAsync(ExpenseUpdateDTO dto, int userId)
         {
             try
             {
-                User? user = await _unitOfWork.UserRepository.GetByUsernameAsync(username);
+                User? user = await _unitOfWork.UserRepository.GetAsync(userId);
                 if (user is null)
                 {
-                    throw new UserNotFoundException("User with username: " + username + " was not found");
+                    throw new UserNotFoundException("User with id: " + userId + " was not found");
                 }
                 Expense updatedExpense = _mapper.Map<Expense>(dto);
                 Expense? existingExpense = await _unitOfWork.ExpenseRepository.GetAsync(updatedExpense.Id);
@@ -135,13 +135,16 @@ namespace ExpenseManagementMVC.Services
                 {
                     throw new ExpenseNotFoundException("Expense with id: " + dto.Id + " was not found");
                 }
-                if (existingExpense.User.Username != username)
+                if (existingExpense.UserId != userId)
                 {
                     throw new NotAllowedActionException("Expense does not belong to this user");
                 }
-                _unitOfWork.ExpenseRepository.Update(updatedExpense);
+                existingExpense.Name = updatedExpense.Name;
+                existingExpense.Amount = updatedExpense.Amount;
+                existingExpense.Category = updatedExpense.Category;
+                existingExpense.Date = updatedExpense.Date;
                 await _unitOfWork.SaveAsync();
-                _logger.LogInformation($"User: {username} sucessfully updated expense with id: {dto.Id}");
+                _logger.LogInformation($"User with id: {userId} sucessfully updated expense with id: {dto.Id}");
             }
             catch (Exception e)
             {

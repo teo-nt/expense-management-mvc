@@ -61,7 +61,8 @@ namespace ExpenseManagementMVC.Repository
 
         public virtual void Update(T entity)
         {
-            _dbSet!.Update(entity);
+            _dbSet!.Attach(entity);
+            _context!.Entry(entity).State = EntityState.Modified;
         }
     }
 }

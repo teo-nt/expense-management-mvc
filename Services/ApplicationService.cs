@@ -3,7 +3,7 @@ using ExpenseManagementMVC.Repository;
 
 namespace ExpenseManagementMVC.Services
 {
-    public class ApplicationService : IApplicationsService
+    public class ApplicationService : IApplicationService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<UserService> _userLogger;

@@ -13,7 +13,7 @@ namespace ExpenseManagementMVC.Repository
 
         public async Task<User?> GetByUsernameAsync(string username)
         {
-            return await _context!.Users.Where(u => u.Username == username).FirstOrDefaultAsync();
+            return await _context!.Users.Where(u => u.Username == username).Include(u => u.Expenses).FirstOrDefaultAsync();
         }
 
         public async Task<User?> LoginUserAsync(string username, string password)

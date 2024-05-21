@@ -1,8 +1,51 @@
-﻿@{
+﻿@model System.Collections.Generic.List<ExpenseManagementMVC.DTO.ExpenseReadOnlyDTO>
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="fs-3">My Expenses</h1>
+</div>
+<a class="btn btn-primary btn-lg mb-4" href="/Expense/Create">New Expense</a>
+
+<table class="mx-auto table table-dark text-center align-middle">
+    <thead>
+        <tr>
+            <th colspan="6">My Expenses</th>
+        </tr>
+        <tr>
+            <th>ID</th>
+            <th>NAME</th>
+            <th>AMOUNT</th>
+            <th>CATEGORY</th>
+            <th>DATE</th>
+            <th>EDIT/DELETE</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Count != 0)
+        {
+            @foreach (var expense in Model)
+            {
+                <tr>
+                    <td>@expense.Id</td>
+                    <td>@expense.Name</td>
+                    <td>@expense.Amount</td>
+                    <td>@expense.Category</td>
+                    <td>@expense.Date.ToShortDateString()</td>
+                    <td>
+                        <a class="btn btn-primary" href="/Expense/Update/@expense.Id">Edit</a>
+                        <a class="btn btn-primary" href="javascript:void(0)" onclick="confirmDelete(@expense.Id)">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<div>
+    @if (ViewData["ErrorMessage"] is not null)
+    {
+        <p>@ViewData["ErrorMessage"]</p>
+    }
 </div>

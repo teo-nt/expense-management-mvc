@@ -12,10 +12,10 @@ namespace ExpenseManagementMVC.Controllers
     public class UserController : Controller
     {
         public List<Error> ErrorArray { get; set; } = new();
-        private readonly IApplicationsService _applicationsService;
+        private readonly IApplicationService _applicationsService;
         private readonly IValidator<UserSignUpDTO> _userSignUpValidator;
 
-        public UserController(IApplicationsService applicationsService, IValidator<UserSignUpDTO> userSignUpValidator)
+        public UserController(IApplicationService applicationsService, IValidator<UserSignUpDTO> userSignUpValidator)
         {
             _applicationsService = applicationsService;
             _userSignUpValidator = userSignUpValidator;
@@ -28,8 +28,9 @@ namespace ExpenseManagementMVC.Controllers
         }
 
         [HttpGet]
-        public IActionResult Login()
+        public IActionResult Login(string returnUrl)
         {
+            ViewData["ReturnUrl"] = returnUrl;
             ClaimsPrincipal principal = HttpContext.User;
             if (principal.Identity!.IsAuthenticated)
             {   
@@ -79,7 +80,7 @@ namespace ExpenseManagementMVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(UserLoginDTO credentials)
+        public async Task<IActionResult> Login(UserLoginDTO credentials, string returnUrl)
         {
             try
             {
@@ -99,10 +100,15 @@ namespace ExpenseManagementMVC.Controllers
                 };
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity), properties);
+                if (Url.IsLocalUrl(returnUrl) && !string.IsNullOrEmpty(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
                 return RedirectToAction("Index", "Home");
             }
             catch (Exception e)
             {
+                ViewData["ReturnUrl"] = returnUrl;
                 ViewData["ValidateMessage"] = e.Message;
                 return View();
             }

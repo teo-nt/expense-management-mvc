@@ -4,22 +4,38 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
+using ExpenseManagementMVC.DTO;
+using ExpenseManagementMVC.Services;
+using AutoMapper;
 
 namespace ExpenseManagementMVC.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        public List<ExpenseReadOnlyDTO> ExpensesDTO { get; set; } = new();
+        private readonly IApplicationService _applicationsService;
+        private readonly IMapper _mapper;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IApplicationService appliactionService, IMapper mapper)
         {
-            _logger = logger;
+            _applicationsService = appliactionService;
+            _mapper = mapper;
         }
 
         [Authorize]
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
-            return View();
+            try
+            {
+                string username = HttpContext.User.Identity!.Name!;
+                List<Expense> expenses = await _applicationsService.ExpenseService.GetAllExpensesByUsernameAsync(username);
+                expenses.ForEach(expense => ExpensesDTO.Add(_mapper.Map<ExpenseReadOnlyDTO>(expense)));
+            } catch (Exception e)
+            {
+                ViewData["ErrorMessage"] = e.Message;
+            }
+            return View(ExpensesDTO);
         }
 
         [Authorize]
