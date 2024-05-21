@@ -61,7 +61,7 @@ namespace ExpenseManagementMVC.Services
                 {
                     throw new ExpenseNotFoundException("Expense with id: " + id + " was not found");
                 }
-                if (expense.User.Id != user.Id)
+                if (expense.UserId != user.Id)
                 {
                     throw new NotAllowedActionException("Expense does not belong to this user");
                 }

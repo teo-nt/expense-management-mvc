@@ -108,5 +108,21 @@ namespace ExpenseManagementMVC.Controllers
             }
             return RedirectToAction("Index", "Home");
         }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Delete(int id)
+        {
+            string username = HttpContext.User.FindFirstValue(ClaimTypes.Name)!;
+            try
+            {
+                await _applicationService.ExpenseService.DeleteExpenseAsync(id, username);
+            }
+            catch (Exception)
+            {
+
+            }
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
